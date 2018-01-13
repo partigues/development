@@ -1,0 +1,84 @@
+
+<!-- saved from url=(0049)file:///C:/development/javascript/code/first.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252"></head><body>
+<script src="./first_files/three.min.js"></script>
+<script>
+//Define window size
+var width = window.innerWidth;
+var height = window.innerHeight;
+
+//smoothened edges for the renderer defined
+var renderer = new THREE.WebGLRenderer({antialias:true});
+//renderer size
+renderer.setSize(width,height);
+//renderer is appended to the html document
+document.body.appendChild(renderer.domElement);
+
+var scene = new THREE.Scene;
+
+//Add Cube - width, height, depth
+var cubeGeom = new THREE.CubeGeometry(100,100,100);
+var cubeMaterial = new THREE.MeshLambertMaterial({color:0x1ec876});
+var cubeGeomNew = new THREE.CubeGeometry(100,100,100);
+var cubeMaterialNew = new THREE.MeshLambertMaterial({color:0x188888});
+var cube = new THREE.Mesh(cubeGeom,cubeMaterial);
+var cubeNew = new THREE.Mesh(cubeGeomNew,cubeMaterialNew);
+cubeNew.position.x=-85;
+cubeNew.position.y=0;
+cubeNew.position.z=100;
+
+//Rotate cube 45 degrees
+cube.rotation.y=Math.PI*45/180;
+cubeNew.rotation.y=Math.PI*45/180;
+
+//Add cube to scene
+scene.add(cube);
+
+
+scene.add(cubeNew);
+
+
+//Add Camera - FOV, Ratio, Close, Far
+var camera = new THREE.PerspectiveCamera(45,width/height,0.1,10000);
+
+//Position camera
+camera.position.y = 160;
+
+//Higher the z value, the closer to the camera/user
+camera.position.z = 400;
+
+//Camera pointed towards cube
+camera.lookAt(cube.position);
+
+//Add camera to scene
+scene.add(camera);
+
+//Define skyBox
+
+var skyBoxGeom = new THREE.CubeGeometry(10000, 10000, 10000);
+var skyBoxMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.BackSide });
+var skyBox = new THREE.Mesh(skyBoxGeom,skyBoxMaterial);
+scene.add(skyBox);
+
+//Point Light
+var pointLight = new THREE.PointLight(0xffffff);
+pointLight.position.set(0,100,200);
+scene.add(pointLight);
+
+//Render scene
+function render() {
+  renderer.render(scene,camera);
+  var clock = new THREE.Clock;
+
+  //rotate cube clockwise - subtract time passed from rotation
+  cube.rotation.y -=clock.getDelta();
+  
+
+  requestAnimationFrame(render);
+}
+
+//Call render function
+render();
+
+</script><canvas width="1366" height="662" style="width: 1366px; height: 662px;"></canvas>
+</body></html>
